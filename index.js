@@ -1,53 +1,14 @@
 const express = require('express');
 const app = express();
 const port = 3000;
+const { participantsList } = require('./data.json');
+const nodemailer = require('nodemailer');
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 let eligibleParticipantsList = [];
-const participantsList = [
-  {
-    fullname: 'Mihai Bogdan',
-    email: 'mihaibogdan@gmail.com',
-    isScientist: false,
-    isStudent: false,
-    isProf: true,
-    coAuthNr: 2,
-  },
-  {
-    fullname: 'Andrei Firicel',
-    email: 'andreifiricel@gmail.com',
-    isScientist: true,
-    isStudent: false,
-    isProf: false,
-    coAuthNr: 5,
-  },
-  {
-    fullname: 'Sebastian Andi',
-    email: 'sebyandie@gmail.com',
-    isScientist: false,
-    isStudent: false,
-    isProf: false,
-    coAuthNr: 1,
-  },
-  {
-    fullname: 'Gabriel Tonita',
-    email: 'gabrieltonita@gmail.com',
-    isScientist: false,
-    isStudent: false,
-    isProf: false,
-    coAuthNr: 1,
-  },
-  {
-    fullname: 'Dragos Tutu',
-    email: 'dragostutu@gmail.com',
-    isScientist: false,
-    isStudent: true,
-    isProf: false,
-    coAuthNr: 1,
-  },
-];
+
 
 async function checkParticipants(participantsList) {
   participantsList.forEach(participant => {
@@ -64,7 +25,33 @@ async function checkParticipants(participantsList) {
   });
 }
 
+async function sendInvitations(participants) {
+  let testAccount = await nodemailer.createTestAccount();
+  let transporter = nodemailer.createTransport({
+    host: "smtp.ethereal.email",
+    port: 587,
+    secure: false,
+    auth: {
+      user: testAccount.user,
+      pass: testAccount.pass
+    },
+  });
+  await Promise.all(participants.map(async (participant) => {
+    await sendInvitation(transporter, participant);
+  }));
+}
+
+async function sendInvitation(transporter, participant) {
+  await transporter.sendMail({
+    from: 'gigel_Frana@gmail.com',
+    to: participant.email,
+    subject: "Invitation",
+    text: "You have been invited to participate to this event",
+  });
+}
+
 app.get('/', async (req, res) => {
+  console.log(participantsList)
   await res.send('Hello World!');
 });
 
@@ -75,6 +62,14 @@ app.get('/participants', async (req, res) => {
     res.send(eligibleParticipantsList);
   }
 });
+
+app.post('/participants/invite', async (req,res) => {
+  if(eligibleParticipantsList.length === 0) {
+    res.send('NO ELIGIBLE PARTICIPANTS TO SEND INVITATIONS!');
+  }
+  await sendInvitations(eligibleParticipantsList);
+  res.send('Invitations sent');
+})
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
