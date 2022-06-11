@@ -1,3 +1,3 @@
 # TAE
 
-Rulati cu nodemon index.js
+Rulati cu npm start
