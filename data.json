@@ -1,0 +1,44 @@
+{ 
+ "participantsList" : [
+    {
+      "fullname": "Mihai Bogdan",
+      "email": "mihaibogdan@gmail.com",
+      "isScientist": false,
+      "isStudent": false,
+      "isProf": true,
+      "coAuthNr": 2
+    },
+    {
+      "fullname": "Andrei Firicel",
+      "email": "andreifiricel@gmail.com",
+      "isScientist": true,
+      "isStudent": false,
+      "isProf": false,
+      "coAuthNr": 5
+    },
+    {
+      "fullname": "Sebastian Andi",
+      "email": "sebyandie@gmail.com",
+      "isScientist": false,
+      "isStudent": false,
+      "isProf": false,
+      "coAuthNr": 1
+    },
+    {
+      "fullname": "Gabriel Tonita",
+      "email": "gabrieltonita@gmail.com",
+      "isScientist": false,
+      "isStudent": false,
+      "isProf": false,
+      "coAuthNr": 1
+    },
+    {
+      "fullname": "Dragos Tutu",
+      "email": "dragostutu@gmail.com",
+      "isScientist": false,
+      "isStudent": true,
+      "isProf": false,
+      "coAuthNr": 1
+    }
+  ]
+}
